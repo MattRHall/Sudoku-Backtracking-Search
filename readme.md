@@ -22,7 +22,7 @@ Backtracking search with forward checking is similar to depth-first search. Howe
 Additional work was done to explore heuristics that could be applied to improve performance by pruning the search tree. This includes searching based on most common integers, and applying naked pairs (f two variables in a row/colum/grid can only be {1,5} then none of the other variables can be {1,5}). However, the increased computational cost of these heuristics did not offset the benefit of a smaller search tree. There are many other different sudoku solving techniques, but checking whether they are applicable at each possible state precludes their use.
 
 ## Usage
-The sudoku class, has the method **sudoku_solver** which takes a numpy array (shape=9x9) as an input. The numpy array should have 0's in place of unknown values, and values between 1-9 elsewhere. If there is no solution to the sudoku, or the input is invalid, then a numpy array (shape=9x9) full of -1's
+The sudoku class, has the method **sudoku_solver()** which takes a numpy array (shape=9x9) as an input. The numpy array should have 0's in place of unknown values, and values between 1-9 elsewhere. If there is no solution to the sudoku, or the input is invalid, then a numpy array (shape=9x9) full of -1's
  
 ```
 puzzle = np.array([[0, 8, 5, 0, 1, 3, 0, 0, 9],
@@ -38,3 +38,21 @@ puzzle = np.array([[0, 8, 5, 0, 1, 3, 0, 0, 9],
 game = sudoku()
 game.sudoku_solver(puzzle)
 ```
+
+## Classes
+(class) **Board** This class contains the functionality of a sudoku board. It is an inner class of the Sudoku class.  
+- Key attributes:  
+    - **final**: A Numpy array of shape 1x81 containing either finalized sudoku values or -1's.
+    - **possibilities**: A numpy array of shape 89x9 containing the possible values for each cell.
+- Key methods:
+    - **_set_value(position, value)**: Places a number in a cell, and removes possibilities from other cells if constraints not met.
+    - **_get_singletons()**: Finds cells where there is only one possible value, but the board has not been updated for it yet.
+    - **_is_goal()**: Returns True if a solution has been found (i.e. all values in *final* are not -1)
+    - **_get_col_row_grid(position)**: Returns the row / col / grid (3x3) indices for a given cell.
+
+(class) **Sudoku** This class contains the functionality of the search algorithm. 
+- Key methods:
+    - **_order_values(partial_state, position)**: Retrieves a list of cells with more than one possibilities, ordered by smallest number of possibilities to largest.
+    - **_depth_first_search(partial_state)**: Performs depth first search, applying constraints at each stage to prune search tree.
+    - **sudoku_solver(sudoku)**: Checks for solution by applying constraints iteratively. If no solution found, *_depth_first_search* applied.
+
