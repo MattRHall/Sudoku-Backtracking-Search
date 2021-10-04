@@ -1,5 +1,5 @@
 .ipynb_checkpoints
 .vscode
 images
-ignore
+ignore_folder
 __pycache__
